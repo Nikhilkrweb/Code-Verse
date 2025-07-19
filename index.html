@@ -22,6 +22,22 @@
     .search-bar {
       width: 100%;
       max-width: 500px;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    .search-bar input.form-control {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      flex: 1 1 auto;
+    }
+
+    .search-bar button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      min-width: 50px;
+      flex: 0 0 auto;
     }
 
     .sidebar {
@@ -73,6 +89,10 @@
       .sidebar {
         display: none;
       }
+      .search-bar {
+        max-width: none;
+        width: 100%;
+      }
     }
 
     .nav-icon {
@@ -87,7 +107,7 @@
   <!-- Top Navbar (Always Visible, No Toggle) -->
   <nav class="navbar navbar-light bg-white fixed-top shadow-sm px-3">
     <a class="navbar-brand" href="#">YouTube</a>
-    <form class="d-flex search-bar mx-auto">
+    <form class="d-flex search-bar mx-auto" style="flex:1;max-width:500px;">
       <input class="form-control" type="search" placeholder="Search">
       <button class="btn btn-outline-secondary" type="submit">
         <span class="material-icons">search</span>
@@ -111,7 +131,7 @@
       <div class="col-md-10 offset-md-2 pt-4">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-5">
           
-          <!-- Video Card -->
+          <!-- Video Card 1 -->
           <div class="col">
             <div class="card video-card">
               <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
@@ -128,7 +148,7 @@
             </div>
           </div>
 
-          <!-- Another Video Card -->
+          <!-- Video Card 2 -->
           <div class="col">
             <div class="card video-card">
               <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
@@ -145,7 +165,175 @@
             </div>
           </div>
 
-          <!-- Add more cards as needed -->
+          <!-- Video Card 3 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">Learning Bootstrap Fast</div>
+                    <div class="video-meta">Bootstrap Guru</div>
+                    <div class="video-meta">55K views • 5 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 4 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">Top 10 CSS Tricks</div>
+                    <div class="video-meta">CSS Master</div>
+                    <div class="video-meta">120K views • 3 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 5 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">JavaScript Async Explained</div>
+                    <div class="video-meta">JS Explained</div>
+                    <div class="video-meta">77K views • 4 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 6 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">HTML5 Deep Dive</div>
+                    <div class="video-meta">HTML Pro</div>
+                    <div class="video-meta">210K views • 1 month ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 7 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">React Tutorial for Beginners</div>
+                    <div class="video-meta">React School</div>
+                    <div class="video-meta">340K views • 2 weeks ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 8 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">Python for Web Devs</div>
+                    <div class="video-meta">PyWeb</div>
+                    <div class="video-meta">98K views • 6 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 9 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">How the Web Works</div>
+                    <div class="video-meta">Web Basics</div>
+                    <div class="video-meta">150K views • 1 month ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 10 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">Vue.js Crash Course</div>
+                    <div class="video-meta">Vue World</div>
+                    <div class="video-meta">250K views • 3 weeks ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 11 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">Node.js in Practice</div>
+                    <div class="video-meta">Node Dev</div>
+                    <div class="video-meta">60K views • 3 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 12 -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">Git and GitHub Basics</div>
+                    <div class="video-meta">Git Mastery</div>
+                    <div class="video-meta">180K views • 4 weeks ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
