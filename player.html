@@ -26,7 +26,7 @@
       z-index: 1040;
     }
 
-    /* App layout: sidebar, player+info (fixed), main scroll */
+    /* Root layout with sidebar and main */
     .page-root {
       width: 100vw;
       height: 100vh;
@@ -36,7 +36,7 @@
       position: relative;
       overflow: hidden;
     }
-    /* Sidebar as in index.html */
+    /* Sidebar styling */
     .custom-sidebar {
       min-width: 220px;
       max-width: 250px;
@@ -60,7 +60,7 @@
       }
     }
 
-    /* Main content right of sidebar (desktop) */
+    /* Main content area right of sidebar */
     .page-main {
       flex: 1 1 0;
       margin-left: 220px;
@@ -76,26 +76,31 @@
       }
     }
 
-    /* Fixed video player + info */
+    /* Fixed video player+info (desktop: curved, centered, not full width) */
     .fixed-player-container {
       width: 100%;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      background: transparent;
-      z-index: 1039;
+      z-index: 1042;
       position: fixed;
-      left: 0;
-      /* top is 56px for navbar + 0 for page-main, but in main, use sticky */
+      left: 220px;
+      /* top is 56px for navbar */
       top: 56px;
       right: 0;
       pointer-events: none;
+      background: transparent;
       /* allow only player-inner to capture events */
+    }
+    @media (max-width: 991.98px) {
+      .fixed-player-container {
+        left: 0;
+      }
     }
     .fixed-player-inner {
       pointer-events: auto;
       background: #fff;
-      margin-top: 10px;
+      margin-top: 16px;
       border-radius: 18px;
       box-shadow: 0 2px 16px rgba(0,0,0,0.10);
       width: 850px;
@@ -104,6 +109,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: width 0.2s, border-radius 0.2s;
     }
     .fixed-player-inner .card.mb-4 {
       margin-bottom: 0 !important;
@@ -135,18 +141,11 @@
       color: #606060;
       margin-bottom: 2px;
     }
-
     /* Height for player+info */
     .fixed-player-inner {
       height: 480px;
     }
     @media (max-width: 991.98px) {
-      .fixed-player-container {
-        left: 0;
-        top: 56px;
-        right: 0;
-        justify-content: flex-start;
-      }
       .fixed-player-inner {
         width: 100vw;
         min-width: 0;
@@ -171,22 +170,17 @@
       overflow-x: hidden;
       background: #f9f9f9;
       z-index: 1;
-      top: 0;
-      /* padding-top will be set by js! */
+      top: 0; /* will be set by JS */
+      /* padding-top is dynamically set by JS */
     }
-
-    /* Make sure video grid is indented under sidebar (desktop) */
     .player-page-main-scroll .container-fluid {
       margin-top: 0 !important;
+      padding-top: 0;
     }
     @media (min-width: 992px) {
       .player-page-main-scroll .container-fluid {
         max-width: 1200px;
       }
-    }
-    /* For wide screens, make grid tight */
-    @media (min-width: 1400px) {
-      .fixed-player-inner { max-width: 1000px; }
     }
     @media (max-width: 767.98px) {
       .player-page-main-scroll .container-fluid {
@@ -434,13 +428,12 @@
       if (player && scrollArea) {
         // Get player height including margin
         const rect = player.getBoundingClientRect();
-        // Always use the same .top as .fixed-player-container so no overlap
-        // Navbar is 56px + marginTop (10px on desktop)
-        let topPad = 56 + player.offsetHeight;
-        if (window.innerWidth >= 992) {
-          topPad = 56 + 10 + player.offsetHeight; // add margin
-        }
-        scrollArea.style.top = (player.parentElement.offsetTop + player.offsetHeight) + "px";
+        // Player is inside .page-main, which is already offset by sidebar
+        // The .fixed-player-inner is margin-top: 16px on desktop, 0 on mobile
+        let offset = 56; // Navbar
+        let marginTop = window.innerWidth >= 992 ? 16 : 0;
+        let playerHeight = player.offsetHeight + marginTop;
+        scrollArea.style.top = (offset + playerHeight) + "px";
       }
     }
     window.addEventListener('resize', setScrollPadding);
