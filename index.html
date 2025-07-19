@@ -83,43 +83,6 @@
           });
         }
 
-        // Add a videoUrl property to each video object for demonstration (replace as needed)
-        // You should add the video URL in your videos.json or here
-        allVideos.forEach(video => {
-          // If you have a videoUrl property in videos.json, remove this block
-          // Otherwise, you can assign demo YouTube links based on title, etc.
-          // Example logic, replace as needed:
-          if (!video.videoUrl) {
-            if (video.title && video.title.includes('CSS Grid')) {
-              video.videoUrl = "https://www.youtube.com/embed/1nwZNiF6j6k";
-            } else if (video.title && video.title.includes('Async Await')) {
-              video.videoUrl = "https://www.youtube.com/embed/V_Kr9OSfDeU";
-            } else if (video.title && video.title.includes('React Tutorial')) {
-              video.videoUrl = "https://www.youtube.com/embed/dGcsHMXbSOA";
-            } else if (video.title && video.title.includes('Python – Full')) {
-              video.videoUrl = "https://www.youtube.com/embed/rfscVS0vtbw";
-            } else if (video.title && video.title.includes('Bootstrap 5')) {
-              video.videoUrl = "https://www.youtube.com/embed/4sosXZsdy-s";
-            } else if (video.title && video.title.includes('Node.js')) {
-              video.videoUrl = "https://www.youtube.com/embed/TlB_eWDSMt4";
-            } else if (video.title && video.title.includes('HTML5 Deep Dive')) {
-              video.videoUrl = "https://www.youtube.com/embed/qz0aGYrrlhU";
-            } else if (video.title && video.title.includes('Vue.js')) {
-              video.videoUrl = "https://www.youtube.com/embed/FXpIoQ_rT_c";
-            } else if (video.title && video.title.includes('Git & GitHub')) {
-              video.videoUrl = "https://www.youtube.com/embed/RGOj5yH7evk";
-            } else if (video.title && video.title.includes('CSS Tricks')) {
-              video.videoUrl = "https://www.youtube.com/embed/Edsxf_NBFrw";
-            } else if (video.title && video.title.includes('How the Web Works')) {
-              video.videoUrl = "https://www.youtube.com/embed/DWkYRh6OXy8";
-            } else if (video.title && video.title.includes('Python for Web Devs')) {
-              video.videoUrl = "https://www.youtube.com/embed/F6u5rhUQ6dU";
-            } else {
-              video.videoUrl = ""; // fallback if unknown
-            }
-          }
-        });
-
         // Shuffle and display all videos (randomized order)
         const randomVideos = shuffleArray(allVideos);
 
