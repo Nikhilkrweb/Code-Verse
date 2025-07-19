@@ -62,8 +62,32 @@
       background-color: #f0f0f0;
     }
 
-    .video-card img {
+    /* Video Card Grid Fixes */
+    .video-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      /* for box shadow and border radius consistency */
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* Restrict card image aspect ratio and make all cards the same height */
+    .video-card .card-img-top {
       width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      object-position: center;
+      min-height: 0;
+      background: #ddd;
+      display: block;
+    }
+
+    .video-card .card-body {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .video-info {
@@ -88,6 +112,31 @@
       color: #606060;
     }
 
+    /* Desktop: Consistent Card Height & Grid */
+    @media (min-width: 992px) {
+      .video-card {
+        min-height: 340px;
+        max-width: 350px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .row-cols-lg-4 > .col {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 991.98px) and (min-width: 768px) {
+      .video-card {
+        min-height: 340px;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .row-cols-md-3 > .col {
+        display: flex;
+      }
+    }
+
     @media (max-width: 767.98px) {
       .sidebar {
         display: none;
@@ -101,6 +150,10 @@
       }
       .mobile-footer {
         display: flex !important;
+      }
+      .video-card {
+        min-height: unset;
+        max-width: 100%;
       }
     }
 
