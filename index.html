@@ -13,8 +13,8 @@
 <body>
   <nav class="navbar navbar-light bg-white fixed-top shadow-sm px-3">
     <a class="navbar-brand" href="#">YouTube</a>
-    <form class="d-flex search-bar mx-auto" style="flex:1;max-width:500px;">
-      <input class="form-control" type="search" placeholder="Search">
+    <form id="search-form" class="d-flex search-bar mx-auto" style="flex:1;max-width:500px;">
+      <input id="search-input" class="form-control" type="search" placeholder="Search">
       <button class="btn btn-outline-secondary" type="submit">
         <span class="material-icons">search</span>
       </button>
@@ -64,13 +64,68 @@
       return array;
     }
 
+    // Compute a simple matching score between video title and query
+    function getMatchScore(title, query) {
+      if (!query) return 0;
+      title = title.toLowerCase();
+      query = query.toLowerCase();
+      // Exact match
+      if (title === query) return 100;
+      // All query words present in title
+      const queryWords = query.split(/\s+/);
+      let score = 0;
+      queryWords.forEach(word => {
+        if (title.includes(word)) score += 10;
+      });
+      // Bonus for prefix match
+      if (title.startsWith(query)) score += 10;
+      // Bonus for substring match
+      if (title.includes(query)) score += 20;
+      return score;
+    }
+
+    // Render videos in the grid
+    function renderVideos(videos) {
+      const grid = document.getElementById('video-grid');
+      grid.innerHTML = '';
+      videos.forEach((video, idx) => {
+        const col = document.createElement('div');
+        col.className = 'col';
+        col.innerHTML = `
+          <div class="card video-card" style="cursor:pointer" data-index="${idx}">
+            <img src="${video.thumbnail}" class="card-img-top" alt="Thumbnail">
+            <div class="card-body">
+              <div class="video-info">
+                <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                <div>
+                  <div class="video-title">${video.title}</div>
+                  <div class="video-meta">Channel Name</div>
+                  <div class="video-meta">1M views • 2 days ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        // Add click event to card
+        col.querySelector('.video-card').addEventListener('click', function() {
+          // Store info in localStorage
+          localStorage.setItem('player_video_title', video.title || '');
+          localStorage.setItem('player_video_thumbnail', video.thumbnail || '');
+          localStorage.setItem('player_video_url', video.videoUrl || '');
+          // Navigate to player.html
+          window.location.href = 'player.html';
+        });
+        grid.appendChild(col);
+      });
+    }
+
+    let allVideos = [];
+
     // Fetch random videos from videos.json
     fetch('videos.json')
       .then(response => response.json())
       .then(videos => {
         // Collect all videos from possible structures
-        let allVideos = [];
-
         if (Array.isArray(videos)) {
           allVideos = videos;
         } else if (Array.isArray(videos.videos)) {
@@ -84,44 +139,36 @@
         }
 
         // Shuffle and display all videos (randomized order)
-        const randomVideos = shuffleArray(allVideos);
-
-        const grid = document.getElementById('video-grid');
-        grid.innerHTML = '';
-        randomVideos.forEach((video, idx) => {
-          const col = document.createElement('div');
-          col.className = 'col';
-          col.innerHTML = `
-            <div class="card video-card" style="cursor:pointer" data-index="${idx}">
-              <img src="${video.thumbnail}" class="card-img-top" alt="Thumbnail">
-              <div class="card-body">
-                <div class="video-info">
-                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
-                  <div>
-                    <div class="video-title">${video.title}</div>
-                    <div class="video-meta">Channel Name</div>
-                    <div class="video-meta">1M views • 2 days ago</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
-          // Add click event to card
-          col.querySelector('.video-card').addEventListener('click', function() {
-            // Store info in localStorage
-            localStorage.setItem('player_video_title', video.title || '');
-            localStorage.setItem('player_video_thumbnail', video.thumbnail || '');
-            localStorage.setItem('player_video_url', video.videoUrl || '');
-            // Navigate to player.html
-            window.location.href = 'player.html';
-          });
-          grid.appendChild(col);
-        });
+        allVideos = shuffleArray(allVideos);
+        renderVideos(allVideos);
       })
       .catch(error => {
         document.getElementById('video-grid').innerHTML = '<div class="text-danger">Failed to load videos.</div>';
         console.error('Error loading videos:', error);
       });
+
+    // Search handler
+    document.getElementById('search-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const query = document.getElementById('search-input').value.trim();
+      if (!query) {
+        renderVideos(allVideos);
+        return;
+      }
+      // Score and sort
+      const scoredVideos = allVideos
+        .map(video => ({
+          ...video,
+          _matchScore: getMatchScore(video.title || '', query)
+        }))
+        .sort((a, b) => b._matchScore - a._matchScore);
+      renderVideos(scoredVideos);
+    });
+
+    // (Optional) Live search as user types
+    // document.getElementById('search-input').addEventListener('input', function() {
+    //   document.getElementById('search-form').dispatchEvent(new Event('submit'));
+    // });
   </script>
 </body>
 </html>
