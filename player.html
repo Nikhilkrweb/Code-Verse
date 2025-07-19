@@ -103,7 +103,8 @@
       margin-top: 16px;
       border-radius: 18px;
       box-shadow: 0 2px 16px rgba(0,0,0,0.10);
-      width: 850px;
+      /* Reduced width for desktop mode */
+      width: 640px;
       max-width: 95vw;
       min-width: 320px;
       overflow: hidden;
@@ -427,9 +428,6 @@
       const scrollArea = document.getElementById('player-scroll');
       if (player && scrollArea) {
         // Get player height including margin
-        const rect = player.getBoundingClientRect();
-        // Player is inside .page-main, which is already offset by sidebar
-        // The .fixed-player-inner is margin-top: 16px on desktop, 0 on mobile
         let offset = 56; // Navbar
         let marginTop = window.innerWidth >= 992 ? 16 : 0;
         let playerHeight = player.offsetHeight + marginTop;
