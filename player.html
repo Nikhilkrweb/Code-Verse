@@ -10,6 +10,40 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="styles.css" rel="stylesheet">
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    body {
+      min-height: 100vh;
+      background: #f9f9f9;
+    }
+    .navbar {
+      z-index: 1040;
+    }
+    /* Fixed video player below navbar, always visible */
+    .fixed-player-container {
+      position: fixed;
+      top: 56px; /* height of navbar */
+      left: 0;
+      right: 0;
+      z-index: 1039;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      width: 100vw;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    /* Responsive height for video player */
+    .fixed-player-inner {
+      max-width: 100vw;
+      margin: 0 auto;
+      border-radius: 0;
+      overflow: hidden;
+    }
     .video-responsive {
       position: relative;
       width: 100%;
@@ -29,34 +63,58 @@
       background: #000;
       display: block;
     }
-    /* Sticky video player below navbar */
-    .sticky-player-wrapper {
-      position: sticky;
-      top: 56px; /* height of navbar */
-      z-index: 1030;
-      background: #fff;
-    }
-    @media (max-width: 991.98px) {
-      .sticky-player-wrapper {
-        top: 56px; /* for mobile navbar height */
-      }
+    /* The main scrolling area for video cards */
+    .player-page-main-scroll {
+      position: absolute;
+      top: calc(56px + 340px); /* navbar + player height (adjust player height as needed) */
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      background: #f9f9f9;
+      z-index: 1;
     }
     @media (max-width: 767.98px) {
-      .sticky-player-wrapper {
+      .fixed-player-container {
         top: 56px;
       }
+      .player-page-main-scroll {
+        top: calc(56px + 210px); /* Adjust for mobile player height */
+      }
     }
-    /* Remove margin between sticky player and navbar */
-    .sticky-player-wrapper .card.mb-4 {
+    /* Make sure video player height matches aspect ratio (16:9) and content */
+    .fixed-player-inner .card.mb-4 {
       margin-bottom: 0 !important;
+      border-radius: 0 !important;
+      width: 100vw !important;
+      max-width: 100vw !important;
+      border: none;
     }
-    body {
-      /* Avoid content hidden below sticky player */
-      padding-top: 56px !important;
+    /* Remove sidebar for mobile */
+    @media (max-width: 991.98px) {
+      .sidebar {
+        display: none !important;
+      }
+      .col-md-10.offset-md-2 {
+        margin-left: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
     }
-    @media (max-width: 767.98px) {
-      body {
-        padding-top: 56px !important;
+    /* Adjust player height for desktop and mobile */
+    @media (min-width: 992px) {
+      .fixed-player-inner {
+        height: 340px;
+      }
+    }
+    @media (max-width: 991.98px) {
+      .fixed-player-inner {
+        height: 210px;
       }
     }
   </style>
@@ -71,29 +129,34 @@
       </button>
     </form>
   </nav>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2 sidebar d-none d-md-block position-fixed">
-        <div class="menu-item"><span class="material-icons">home</span> Home</div>
-        <div class="menu-item"><span class="material-icons">subscriptions</span> Subscriptions</div>
-        <div class="menu-item"><span class="material-icons">video_library</span> Library</div>
-        <div class="menu-item"><span class="material-icons">history</span> History</div>
+
+  <!-- Fixed Video Player (always at top, below navbar) -->
+  <div class="fixed-player-container">
+    <div class="fixed-player-inner">
+      <div class="card mb-4">
+        <div class="video-responsive" id="video-container"></div>
+        <div class="card-body">
+          <div class="video-title" id="video-title"></div>
+          <div class="video-meta">Channel Name</div>
+          <div class="video-meta">1M views • 2 days ago</div>
+        </div>
       </div>
-      <div class="col-md-10 offset-md-2 pt-4">
-        <div class="sticky-player-wrapper">
-          <div class="card mb-4" style="border-radius: 12px; overflow: hidden;">
-            <div class="video-responsive" id="video-container"></div>
-            <div class="card-body">
-              <div class="video-title" id="video-title"></div>
-              <div class="video-meta">Channel Name</div>
-              <div class="video-meta">1M views • 2 days ago</div>
-            </div>
-          </div>
-        </div>
-        <!-- Video Cards Grid Below Player -->
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3" id="video-grid">
-          <!-- Video cards will be generated here -->
-        </div>
+    </div>
+  </div>
+
+  <!-- Sidebar (hidden on mobile) -->
+  <div class="sidebar d-none d-md-block position-fixed" style="left:0;top:56px;z-index:1041;height:100vh;">
+    <div class="menu-item"><span class="material-icons">home</span> Home</div>
+    <div class="menu-item"><span class="material-icons">subscriptions</span> Subscriptions</div>
+    <div class="menu-item"><span class="material-icons">video_library</span> Library</div>
+    <div class="menu-item"><span class="material-icons">history</span> History</div>
+  </div>
+
+  <!-- Main scrollable area for video cards -->
+  <div class="player-page-main-scroll">
+    <div class="container-fluid px-3">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="video-grid">
+        <!-- Video cards will be generated here -->
       </div>
     </div>
   </div>
@@ -243,7 +306,6 @@
         } else {
           renderVideos(filteredVideos);
         }
-        // Make filteredVideos available for search
         window.filteredVideos = filteredVideos;
       })
       .catch(error => {
