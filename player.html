@@ -29,6 +29,66 @@
       background: #000;
       display: block;
     }
+
+    /* --- Fixed Video Player Card --- */
+    .fixed-player-card {
+      position: fixed;
+      top: 56px; /* height of navbar */
+      left: 0;
+      right: 0;
+      z-index: 1039; /* just below navbar */
+      max-width: inherit;
+      border-radius: 0 !important;
+      margin: 0 !important;
+      width: 100%;
+      /* optional shadow for separation */
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    }
+    @media (min-width: 768px) {
+      .fixed-player-card {
+        left: 16.6667%; /* col-md-2 sidebar (2/12 columns) */
+        width: 83.3333%;
+      }
+    }
+    @media (min-width: 1200px) {
+      .fixed-player-card {
+        left: 16.6667%;
+        width: 83.3333%;
+      }
+    }
+    .player-placeholder {
+      height: calc(56.25vw * 0.833333 + 32px); /* video aspect + padding for desktop */
+      max-height: 368px;
+    }
+    @media (max-width: 991.98px) {
+      .fixed-player-card { left: 0; width: 100vw;}
+      .player-placeholder { height: calc(56.25vw + 32px);}
+    }
+    @media (max-width: 767.98px) {
+      .fixed-player-card { top: 56px; left: 0; width: 100vw;}
+      .player-placeholder { height: calc(56.25vw + 32px);}
+    }
+    /* Remove border radius for fixed card */
+    .fixed-player-card,
+    .fixed-player-card > .video-responsive {
+      border-radius: 0 !important;
+    }
+    /* Ensure scrolls under player */
+    .videos-scroll-under {
+      margin-top: calc(56.25vw + 32px); /* video aspect + card body padding */
+    }
+    @media (min-width: 768px) {
+      .videos-scroll-under {
+        margin-top: 400px;
+      }
+      .player-placeholder { height: 400px; }
+    }
+    @media (min-width: 1200px) {
+      .videos-scroll-under {
+        margin-top: 400px;
+      }
+      .player-placeholder { height: 400px; }
+    }
   </style>
 </head>
 <body>
@@ -49,20 +109,20 @@
         <div class="menu-item"><span class="material-icons">video_library</span> Library</div>
         <div class="menu-item"><span class="material-icons">history</span> History</div>
       </div>
-      <div class="col-md-10 offset-md-2 pt-4">
-        <div class="row mt-5">
-          <div class="col-12">
-            <div class="card mb-4" style="border-radius: 12px; overflow: hidden;">
-              <div class="video-responsive" id="video-container"></div>
-              <div class="card-body">
-                <div class="video-title" id="video-title"></div>
-                <div class="video-meta">Channel Name</div>
-                <div class="video-meta">1M views • 2 days ago</div>
-              </div>
-            </div>
+      <div class="col-md-10 offset-md-2 pt-4" style="position:relative;">
+        <!-- Fixed Video Player Card -->
+        <div class="card mb-4 fixed-player-card" style="overflow: hidden;">
+          <div class="video-responsive" id="video-container"></div>
+          <div class="card-body">
+            <div class="video-title" id="video-title"></div>
+            <div class="video-meta">Channel Name</div>
+            <div class="video-meta">1M views • 2 days ago</div>
           </div>
         </div>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3" id="video-grid">
+        <!-- Placeholder to preserve scroll offset -->
+        <div class="player-placeholder d-none d-md-block"></div>
+        <!-- Video Cards (scroll under) -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3 videos-scroll-under" id="video-grid">
           <!-- Video cards will be generated here -->
         </div>
       </div>
