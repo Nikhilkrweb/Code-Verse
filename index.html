@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube UI Clone</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="logo">YouTube</div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search">
+      <button><span class="material-icons">search</span></button>
+    </div>
+    <div class="profile"><span class="material-icons">account_circle</span></div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="menu-item"><span class="material-icons">home</span> Home</div>
+    <div class="menu-item"><span class="material-icons">subscriptions</span> Subscriptions</div>
+    <div class="menu-item"><span class="material-icons">video_library</span> Library</div>
+    <div class="menu-item"><span class="material-icons">history</span> History</div>
+  </aside>
+
+  <!-- Main Video Grid -->
+  <main class="main-content">
+    <div class="video-grid">
+      <!-- Sample Video Card -->
+      <div class="video-card">
+        <img src="https://via.placeholder.com/320x180" alt="Thumbnail">
+        <div class="video-info">
+          <img src="https://via.placeholder.com/36" class="channel-icon" alt="Channel">
+          <div class="video-text">
+            <h4 class="video-title">Sample Video Title</h4>
+            <p class="channel-name">Channel Name</p>
+            <p class="video-stats">1M views • 1 day ago</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Duplicate as needed -->
+      <div class="video-card">
+        <img src="https://via.placeholder.com/320x180" alt="Thumbnail">
+        <div class="video-info">
+          <img src="https://via.placeholder.com/36" class="channel-icon" alt="Channel">
+          <div class="video-text">
+            <h4 class="video-title">Another Video Title</h4>
+            <p class="channel-name">Another Channel</p>
+            <p class="video-stats">300K views • 2 days ago</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
