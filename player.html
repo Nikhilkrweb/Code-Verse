@@ -30,7 +30,7 @@
       display: block;
     }
 
-    /* --- Fixed Video Player Card (centered, YouTube-like size) --- */
+    /* --- Fixed Video Player Card (centered, smaller desktop size) --- */
     .fixed-player-wrapper {
       position: fixed;
       top: 56px; /* height of navbar */
@@ -48,14 +48,14 @@
       margin-top: 16px;
       margin-bottom: 0;
       width: 100%;
-      max-width: 640px;
+      max-width: 500px;   /* SMALLER DESKTOP WIDTH */
       box-shadow: 0 4px 16px rgba(0,0,0,0.07);
       overflow: hidden;
       pointer-events: auto;
     }
     @media (min-width: 1200px) {
       .fixed-player-card {
-        max-width: 720px;
+        max-width: 600px;  /* Optional: slightly larger on xl screens */
       }
     }
     @media (max-width: 991.98px) {
@@ -81,13 +81,11 @@
     }
     .player-placeholder {
       display: block;
-      height: 418px;
-      /* 360px (16:9 for 640px width) + 58px for card-body */
+      height: 333px; /* 281.25px (16:9 for 500px width) + ~52px for card-body */
     }
     @media (min-width: 1200px) {
       .player-placeholder {
-        height: 468px;
-        /* 405px (16:9 for 720px width) + 63px for card-body */
+        height: 390px; /* 337.5px (16:9 for 600px width) + ~52px for card-body */
       }
     }
     @media (max-width: 991.98px) {
@@ -106,12 +104,11 @@
     }
 
     .videos-scroll-under {
-      margin-top: 434px;
-      /* 418px + 16px (margin) */
+      margin-top: 349px; /* 333px + 16px (margin) */
     }
     @media (min-width: 1200px) {
       .videos-scroll-under {
-        margin-top: 484px;
+        margin-top: 406px;
       }
     }
     @media (max-width: 991.98px) {
