@@ -104,24 +104,22 @@
         `;
         // Add click event to card
         col.querySelector('.video-card').addEventListener('click', function() {
-          localStorage.setItem('player_video_title', video.title || '');
-          localStorage.setItem('player_video_thumbnail', video.thumbnail || '');
-          localStorage.setItem('player_video_url', video.videoUrl || '');
-          window.location.href = 'player.html';
+          // Pass video details as URL query parameters to player.html
+          // EncodeURIComponent ensures special characters don't break the URL
+          const params = new URLSearchParams({
+            title: video.title || '',
+            thumbnail: video.thumbnail || '',
+            url: video.videoUrl || ''
+          });
+          window.location.href = 'player.html?' + params.toString();
         });
         grid.appendChild(col);
       });
     }
 
-    // Parse query string
-    function getQueryParam(name) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(name) || '';
-    }
-
     let allVideos = [];
 
-    // Fetch videos from videos.json
+    // Fetch random videos from videos.json
     fetch('videos.json')
       .then(response => response.json())
       .then(videos => {
@@ -139,7 +137,8 @@
         allVideos = shuffleArray(allVideos);
 
         // Set input value if query is present in url
-        const urlQuery = getQueryParam('query');
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlQuery = urlParams.get('query') || '';
         if (urlQuery) {
           document.getElementById('search-input').value = urlQuery;
           showSearchResults(urlQuery);
@@ -152,7 +151,6 @@
         console.error('Error loading videos:', error);
       });
 
-    // Function to show results for a query
     function showSearchResults(query) {
       if (!query) {
         renderVideos(allVideos);
@@ -167,7 +165,6 @@
       renderVideos(scoredVideos);
     }
 
-    // Search handler
     document.getElementById('search-form').addEventListener('submit', function(e) {
       e.preventDefault();
       const query = document.getElementById('search-input').value.trim();
@@ -178,16 +175,6 @@
       window.history.replaceState({}, '', newUrl);
       showSearchResults(query);
     });
-
-    // Optionally, support live search as user types (uncomment if needed)
-    // document.getElementById('search-input').addEventListener('input', function() {
-    //   const query = this.value.trim();
-    //   const newUrl = query
-    //     ? window.location.pathname + '?query=' + encodeURIComponent(query)
-    //     : window.location.pathname;
-    //   window.history.replaceState({}, '', newUrl);
-    //   showSearchResults(query);
-    // });
   </script>
 </body>
 </html>
