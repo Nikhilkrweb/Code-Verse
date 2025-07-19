@@ -16,6 +16,7 @@
       padding: 0;
       box-sizing: border-box;
       overflow: hidden;
+      background: #f9f9f9;
     }
     body {
       min-height: 100vh;
@@ -24,49 +25,100 @@
     .navbar {
       z-index: 1040;
     }
-    /* Fixed video player below navbar, always visible */
+
+    /* Fixed video player below navbar, always visible, with info */
     .fixed-player-container {
       position: fixed;
       top: 56px; /* height of navbar */
       left: 0;
       right: 0;
       z-index: 1039;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      background: transparent;
       width: 100vw;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      box-shadow: none;
     }
-    /* Responsive height for video player */
     .fixed-player-inner {
-      max-width: 100vw;
-      margin: 0 auto;
+      width: 100vw;
       border-radius: 0;
       overflow: hidden;
+      background: #fff;
+      margin: 0 auto;
     }
-    .video-responsive {
+    /* On desktop, video player is centered and in a curved container */
+    @media (min-width: 992px) {
+      .fixed-player-inner {
+        width: 80vw;
+        max-width: 850px;
+        min-width: 320px;
+        border-radius: 16px;
+        margin-top: 10px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+      }
+      .fixed-player-container {
+        background: transparent;
+      }
+    }
+    /* On mobile, player takes full width, no curve */
+    @media (max-width: 991.98px) {
+      .fixed-player-inner {
+        width: 100vw;
+        border-radius: 0;
+        margin-top: 0;
+        box-shadow: none;
+      }
+      .fixed-player-container {
+        background: #fff;
+      }
+    }
+    .fixed-player-inner .card.mb-4 {
+      margin-bottom: 0 !important;
+      border-radius: inherit !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      border: none;
+      background: inherit;
+      box-shadow: none;
+    }
+    .fixed-player-inner .video-responsive {
+      border-radius: 0 !important;
+      background: #000;
+    }
+    /* Responsive height for fixed player */
+    .fixed-player-inner {
+      /* Desktop 480px, mobile 260px */
+      height: 480px;
+    }
+    @media (max-width: 991.98px) {
+      .fixed-player-inner {
+        height: 260px;
+      }
+    }
+    /* Card body (info) always visible and fixed with video */
+    .fixed-player-inner .card-body {
+      background: #fff;
+      border-top: 1px solid #eee;
       position: relative;
-      width: 100%;
-      padding-top: 56.25%;
-      background: #000;
-      overflow: hidden;
+      z-index: 2;
+      padding: 16px 16px 8px 16px;
     }
-    .video-responsive iframe,
-    .video-responsive video,
-    .video-responsive img {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      object-fit: cover;
-      background: #000;
-      display: block;
+    .fixed-player-inner .video-title {
+      font-weight: 600;
+      font-size: 20px;
+      margin-bottom: 6px;
     }
-    /* The main scrolling area for video cards */
+    .fixed-player-inner .video-meta {
+      font-size: 15px;
+      color: #606060;
+      margin-bottom: 2px;
+    }
+
+    /* Scrolling area for video cards */
     .player-page-main-scroll {
       position: absolute;
-      top: calc(56px + 340px); /* navbar + player height (adjust player height as needed) */
+      top: calc(56px + 480px); /* navbar + player height (desktop) */
       left: 0;
       right: 0;
       bottom: 0;
@@ -77,22 +129,12 @@
       background: #f9f9f9;
       z-index: 1;
     }
-    @media (max-width: 767.98px) {
-      .fixed-player-container {
-        top: 56px;
-      }
+    @media (max-width: 991.98px) {
       .player-page-main-scroll {
-        top: calc(56px + 210px); /* Adjust for mobile player height */
+        top: calc(56px + 260px); /* navbar + player height (mobile) */
       }
     }
-    /* Make sure video player height matches aspect ratio (16:9) and content */
-    .fixed-player-inner .card.mb-4 {
-      margin-bottom: 0 !important;
-      border-radius: 0 !important;
-      width: 100vw !important;
-      max-width: 100vw !important;
-      border: none;
-    }
+
     /* Remove sidebar for mobile */
     @media (max-width: 991.98px) {
       .sidebar {
@@ -104,17 +146,6 @@
         max-width: 100vw !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
-      }
-    }
-    /* Adjust player height for desktop and mobile */
-    @media (min-width: 992px) {
-      .fixed-player-inner {
-        height: 340px;
-      }
-    }
-    @media (max-width: 991.98px) {
-      .fixed-player-inner {
-        height: 210px;
       }
     }
   </style>
@@ -135,10 +166,10 @@
     <div class="fixed-player-inner">
       <div class="card mb-4">
         <div class="video-responsive" id="video-container"></div>
-        <div class="card-body">
+        <div class="card-body" id="video-info">
           <div class="video-title" id="video-title"></div>
-          <div class="video-meta">Channel Name</div>
-          <div class="video-meta">1M views • 2 days ago</div>
+          <div class="video-meta" id="video-channel"></div>
+          <div class="video-meta" id="video-stats"></div>
         </div>
       </div>
     </div>
@@ -189,7 +220,13 @@
     const videoThumbnail = getQueryParam('thumbnail');
     const videoUrl = getQueryParam('url');
 
+    // Demo channel/stats info (replace with real data if available)
+    const demoChannel = 'Channel Name';
+    const demoStats = '1M views • 2 days ago';
+
     document.getElementById('video-title').textContent = videoTitle || 'Untitled Video';
+    document.getElementById('video-channel').textContent = demoChannel;
+    document.getElementById('video-stats').textContent = demoStats;
 
     const videoContainer = document.getElementById('video-container');
     if (videoUrl && videoUrl.includes('youtube.com/embed/')) {
