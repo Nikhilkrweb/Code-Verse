@@ -2,58 +2,155 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>YouTube UI Clone</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>YouTube UI Bootstrap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-color: #f9f9f9;
+    }
+
+    .sidebar {
+      min-height: 100vh;
+      background-color: white;
+      padding-top: 60px;
+      box-shadow: 1px 0 2px rgba(0,0,0,0.1);
+    }
+
+    .menu-item {
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .menu-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    .video-card img {
+      width: 100%;
+    }
+
+    .video-info {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    .channel-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .video-title {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .video-meta {
+      font-size: 14px;
+      color: #606060;
+    }
+
+    .navbar-brand {
+      color: red !important;
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    @media (max-width: 767.98px) {
+      .sidebar {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Top Navigation -->
-  <header class="top-nav">
-    <div class="logo">YouTube</div>
-    <div class="search-bar">
-      <input type="text" placeholder="Search">
-      <button><span class="material-icons">search</span></button>
-    </div>
-    <div class="profile"><span class="material-icons">account_circle</span></div>
-  </header>
 
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="menu-item"><span class="material-icons">home</span> Home</div>
-    <div class="menu-item"><span class="material-icons">subscriptions</span> Subscriptions</div>
-    <div class="menu-item"><span class="material-icons">video_library</span> Library</div>
-    <div class="menu-item"><span class="material-icons">history</span> History</div>
-  </aside>
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">YouTube</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSearch">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  <!-- Main Video Grid -->
-  <main class="main-content">
-    <div class="video-grid">
-      <!-- Sample Video Card -->
-      <div class="video-card">
-        <img src="https://via.placeholder.com/320x180" alt="Thumbnail">
-        <div class="video-info">
-          <img src="https://via.placeholder.com/36" class="channel-icon" alt="Channel">
-          <div class="video-text">
-            <h4 class="video-title">Sample Video Title</h4>
-            <p class="channel-name">Channel Name</p>
-            <p class="video-stats">1M views • 1 day ago</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Duplicate as needed -->
-      <div class="video-card">
-        <img src="https://via.placeholder.com/320x180" alt="Thumbnail">
-        <div class="video-info">
-          <img src="https://via.placeholder.com/36" class="channel-icon" alt="Channel">
-          <div class="video-text">
-            <h4 class="video-title">Another Video Title</h4>
-            <p class="channel-name">Another Channel</p>
-            <p class="video-stats">300K views • 2 days ago</p>
-          </div>
+      <div class="collapse navbar-collapse" id="navbarSearch">
+        <form class="d-flex mx-auto w-50">
+          <input class="form-control me-2" type="search" placeholder="Search">
+          <button class="btn btn-outline-secondary" type="submit"><span class="material-icons">search</span></button>
+        </form>
+        <div class="d-flex">
+          <span class="material-icons fs-3">account_circle</span>
         </div>
       </div>
     </div>
-  </main>
+  </nav>
+
+  <!-- Layout with Sidebar and Content -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar d-none d-md-block position-fixed">
+        <div class="menu-item"><span class="material-icons">home</span> Home</div>
+        <div class="menu-item"><span class="material-icons">subscriptions</span> Subscriptions</div>
+        <div class="menu-item"><span class="material-icons">video_library</span> Library</div>
+        <div class="menu-item"><span class="material-icons">history</span> History</div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-md-10 offset-md-2 pt-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-5">
+
+          <!-- Video Card -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Video Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">Sample Video Title</div>
+                    <div class="video-meta">Channel Name</div>
+                    <div class="video-meta">1M views • 2 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Duplicate as needed -->
+          <div class="col">
+            <div class="card video-card">
+              <img src="https://via.placeholder.com/320x180" class="card-img-top" alt="Video Thumbnail">
+              <div class="card-body">
+                <div class="video-info">
+                  <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                  <div>
+                    <div class="video-title">Another Great Video</div>
+                    <div class="video-meta">Cool Channel</div>
+                    <div class="video-meta">800K views • 1 week ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add more video cards here -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
