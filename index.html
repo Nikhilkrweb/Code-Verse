@@ -12,7 +12,7 @@
 </head>
 <body>
   <nav class="navbar bg-white navbar-light fixed-top shadow-sm px-3">
-    <a class="navbar-brand" href="#">CodeVerse</a>
+    <a class="navbar-brand" href="#">YouTube</a>
     <form id="search-form" class="d-flex search-bar mx-auto" style="flex:1;max-width:500px;">
       <input id="search-input" class="form-control" type="search" placeholder="Search">
       <button class="btn btn-outline-secondary" type="submit">
@@ -71,91 +71,111 @@
       if (!query) return 0;
       title = title.toLowerCase();
       query = query.toLowerCase();
-      if (title.includes(query)) return 100;
-      // Split query into words and count matches
+      if (title === query) return 100;
+      const queryWords = query.split(/\s+/);
       let score = 0;
-      query.split(' ').forEach(word => {
+      queryWords.forEach(word => {
         if (title.includes(word)) score += 10;
       });
+      if (title.startsWith(query)) score += 10;
+      if (title.includes(query)) score += 20;
       return score;
     }
 
-    // Dummy video data
-    const videos = shuffleArray([
-      { title: 'HTML Crash Course', thumbnail: 'thumbnails/html.png', videoUrl: 'videos/html.mp4' },
-      { title: 'CSS Flexbox Tutorial', thumbnail: 'thumbnails/css.png', videoUrl: 'videos/css.mp4' },
-      { title: 'JavaScript Basics', thumbnail: 'thumbnails/js.png', videoUrl: 'videos/js.mp4' },
-      { title: 'Bootstrap 5 Overview', thumbnail: 'thumbnails/bootstrap.png', videoUrl: 'videos/bootstrap.mp4' },
-      // Add more videos as needed
-    ]);
-
-    function renderVideos(query) {
+    // Render videos in the grid
+    function renderVideos(videos) {
       const grid = document.getElementById('video-grid');
       grid.innerHTML = '';
-      // Sort videos by match score (if query exists), otherwise shuffle
-      let filtered = videos.map(video => ({
-        ...video,
-        score: getMatchScore(video.title, query)
-      }));
-      if (query) {
-        filtered = filtered.filter(v => v.score > 0);
-        filtered.sort((a, b) => b.score - a.score);
-      }
-      if (!filtered.length && query) {
-        grid.innerHTML = "<div class='col'><div class='alert alert-warning'>No results found for <b>" + query + "</b></div></div>";
-        return;
-      }
-      filtered.forEach(video => {
+      videos.forEach((video, idx) => {
         const col = document.createElement('div');
         col.className = 'col';
         col.innerHTML = `
-          <div class="card video-card h-100" style="cursor:pointer;">
-            <img src="${video.thumbnail}" class="card-img-top" alt="${video.title}">
+          <div class="card video-card" style="cursor:pointer" data-index="${idx}">
+            <img src="${video.thumbnail}" class="card-img-top" alt="Thumbnail" loading="lazy">
             <div class="card-body">
-              <h5 class="card-title">${video.title}</h5>
+              <div class="video-info">
+                <img src="https://via.placeholder.com/40" class="channel-icon" alt="Channel Icon">
+                <div>
+                  <div class="video-title">${video.title}</div>
+                  <div class="video-meta">Channel Name</div>
+                  <div class="video-meta">1M views • 2 days ago</div>
+                </div>
+              </div>
             </div>
           </div>
         `;
         // Add click event to card
         col.querySelector('.video-card').addEventListener('click', function() {
-          // Get the current search query from the input or URL
-          let searchQuery = document.getElementById('search-input').value.trim();
-          if (!searchQuery) {
-            const urlParams = new URLSearchParams(window.location.search);
-            searchQuery = urlParams.get('query') || '';
-          }
+          // Pass video details as URL query parameters to player.html
+          // EncodeURIComponent ensures special characters don't break the URL
           const params = new URLSearchParams({
             title: video.title || '',
             thumbnail: video.thumbnail || '',
             url: video.videoUrl || ''
           });
-          if (searchQuery) {
-            params.set('query', searchQuery);
-          }
           window.location.href = 'player.html?' + params.toString();
         });
         grid.appendChild(col);
       });
     }
 
-    // Handle search form submit
+    let allVideos = [];
+
+    // Fetch random videos from videos.json
+    fetch('videos.json')
+      .then(response => response.json())
+      .then(videos => {
+        if (Array.isArray(videos)) {
+          allVideos = videos;
+        } else if (Array.isArray(videos.videos)) {
+          allVideos = videos.videos;
+        } else if (Array.isArray(videos.series)) {
+          videos.series.forEach(seriesItem => {
+            if (Array.isArray(seriesItem.videos)) {
+              allVideos = allVideos.concat(seriesItem.videos);
+            }
+          });
+        }
+        allVideos = shuffleArray(allVideos);
+
+        // Set input value if query is present in url
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlQuery = urlParams.get('query') || '';
+        if (urlQuery) {
+          document.getElementById('search-input').value = urlQuery;
+          showSearchResults(urlQuery);
+        } else {
+          renderVideos(allVideos);
+        }
+      })
+      .catch(error => {
+        document.getElementById('video-grid').innerHTML = '<div class="text-danger">Failed to load videos.</div>';
+        console.error('Error loading videos:', error);
+      });
+
+    function showSearchResults(query) {
+      if (!query) {
+        renderVideos(allVideos);
+        return;
+      }
+      const scoredVideos = allVideos
+        .map(video => ({
+          ...video,
+          _matchScore: getMatchScore(video.title || '', query)
+        }))
+        .sort((a, b) => b._matchScore - a._matchScore);
+      renderVideos(scoredVideos);
+    }
+
     document.getElementById('search-form').addEventListener('submit', function(e) {
       e.preventDefault();
       const query = document.getElementById('search-input').value.trim();
-      renderVideos(query);
-      // Update URL with ?query= for direct linking
-      const newUrl = window.location.pathname + (query ? `?query=${encodeURIComponent(query)}` : '');
+      // Update URL with query param
+      const newUrl = query
+        ? window.location.pathname + '?query=' + encodeURIComponent(query)
+        : window.location.pathname;
       window.history.replaceState({}, '', newUrl);
-    });
-
-    // On page load, render videos (respecting query param if present)
-    window.addEventListener('DOMContentLoaded', function() {
-      const params = new URLSearchParams(window.location.search);
-      const query = params.get('query') || '';
-      if (query) {
-        document.getElementById('search-input').value = query;
-      }
-      renderVideos(query);
+      showSearchResults(query);
     });
   </script>
 </body>
