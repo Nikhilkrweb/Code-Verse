@@ -106,15 +106,28 @@
         `;
         // Add click event to card
         col.querySelector('.video-card').addEventListener('click', function() {
-          // Pass video details as URL query parameters to player.html
-          // EncodeURIComponent ensures special characters don't break the URL
-          const params = new URLSearchParams({
-            title: video.title || '',
-            thumbnail: video.thumbnail || '',
-            url: video.videoUrl || ''
-          });
-          window.location.href = 'player.html?' + params.toString();
-        });
+  // Get the current search query from the input or URL
+  let query = document.getElementById('search-input').value.trim();
+  // Fallback to the query param in the URL (if input is empty)
+  if (!query) {
+    const urlParams = new URLSearchParams(window.location.search);
+    query = urlParams.get('query') || '';
+  }
+
+  // Build URL params for the video
+  const params = new URLSearchParams({
+    title: video.title || '',
+    thumbnail: video.thumbnail || '',
+    url: video.videoUrl || ''
+  });
+
+  // If a search query exists, add it to the params
+  if (query) {
+    params.set('query', query);
+  }
+
+  window.location.href = 'player.html?' + params.toString();
+});
         grid.appendChild(col);
       });
     }
