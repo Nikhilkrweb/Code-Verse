@@ -10,24 +10,25 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="styles.css" rel="stylesheet">
   <style>
-    /* Responsive video container height fix for Android/mobile */
-    @media (max-width: 767.98px) {
-      #video-container iframe,
-      #video-container video,
-      #video-container img {
-        height: 290px !important;
-        max-height: 290px !important;
-        min-height: 160px !important;
-      }
+    /* Responsive video wrapper for 16:9 aspect ratio */
+    .video-responsive {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000;
+      overflow: hidden;
     }
-    @media (max-width: 400px) {
-      #video-container iframe,
-      #video-container video,
-      #video-container img {
-        height: 180px !important;
-        max-height: 180px !important;
-        min-height: 90px !important;
-      }
+    .video-responsive iframe,
+    .video-responsive video,
+    .video-responsive img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+      background: #000;
+      display: block;
     }
   </style>
 </head>
@@ -54,7 +55,7 @@
           <div class="col-12">
             <!-- Video Player -->
             <div class="card mb-4" style="border-radius: 12px; overflow: hidden;">
-              <div id="video-container" style="background: #000;">
+              <div class="video-responsive" id="video-container">
                 <!-- Video will be injected here -->
               </div>
               <div class="card-body">
@@ -102,32 +103,24 @@
     document.getElementById('video-title').textContent = videoTitle || 'Untitled Video';
 
     const videoContainer = document.getElementById('video-container');
-    // Use responsive width and fixed height for Android/mobile
-    const desktopHeight = "480";
-    const mobileHeight = window.innerWidth <= 767 ? "290" : desktopHeight;
-
     if (videoUrl && videoUrl.includes('youtube.com/embed/')) {
       videoContainer.innerHTML = `
         <iframe
-          width="100%"
-          height="${mobileHeight}"
           src="${videoUrl}?autoplay=1"
           title="${videoTitle}"
-          frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
-          style="aspect-ratio: 16/9; width: 100%; min-width: 200px; display: block;"
         ></iframe>
       `;
     } else if (videoUrl) {
       videoContainer.innerHTML = `
-        <video width="100%" height="${mobileHeight}" controls autoplay poster="${videoThumbnail}" style="aspect-ratio: 16/9; width: 100%; min-width: 200px; display: block;">
+        <video controls autoplay poster="${videoThumbnail}">
           <source src="${videoUrl}">
           Your browser does not support the video tag.
         </video>
       `;
     } else if (videoThumbnail) {
-      videoContainer.innerHTML = `<img src="${videoThumbnail}" alt="Video Thumbnail" style="width:100%; aspect-ratio:16/9; display:block; height:${mobileHeight}px;">`;
+      videoContainer.innerHTML = `<img src="${videoThumbnail}" alt="Video Thumbnail">`;
     } else {
       videoContainer.innerHTML = `<div class="text-danger p-4">No video selected.</div>`;
     }
