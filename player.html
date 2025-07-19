@@ -15,18 +15,17 @@
       #video-container iframe,
       #video-container video,
       #video-container img {
-        height: 220px !important;
-        max-height: 220px !important;
-        min-height: 120px !important;
+        height: 290px !important;
+        max-height: 290px !important;
+        min-height: 160px !important;
       }
     }
-    /* Optionally, for slightly better scaling at very small sizes */
     @media (max-width: 400px) {
       #video-container iframe,
       #video-container video,
       #video-container img {
-        height: 150px !important;
-        max-height: 150px !important;
+        height: 180px !important;
+        max-height: 180px !important;
         min-height: 90px !important;
       }
     }
@@ -105,7 +104,7 @@
     const videoContainer = document.getElementById('video-container');
     // Use responsive width and fixed height for Android/mobile
     const desktopHeight = "480";
-    const mobileHeight = window.innerWidth <= 767 ? "220" : desktopHeight;
+    const mobileHeight = window.innerWidth <= 767 ? "290" : desktopHeight;
 
     if (videoUrl && videoUrl.includes('youtube.com/embed/')) {
       videoContainer.innerHTML = `
