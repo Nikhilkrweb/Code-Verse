@@ -68,7 +68,7 @@
     fetch('videos.json')
       .then(response => response.json())
       .then(videos => {
-        // If videos.json contains a "series" property (array), use its "videos" property, else use the top-level array "videos"
+        // Collect all videos from possible structures
         let allVideos = [];
 
         if (Array.isArray(videos)) {
@@ -76,7 +76,6 @@
         } else if (Array.isArray(videos.videos)) {
           allVideos = videos.videos;
         } else if (Array.isArray(videos.series)) {
-          // If the file has a "series" array, collect all videos from all series
           videos.series.forEach(seriesItem => {
             if (Array.isArray(seriesItem.videos)) {
               allVideos = allVideos.concat(seriesItem.videos);
@@ -84,9 +83,8 @@
           });
         }
 
-        // Shuffle the array and pick the first N (e.g., 12) random videos
-        const SHOWN = 12;
-        const randomVideos = shuffleArray(allVideos).slice(0, SHOWN);
+        // Shuffle and display all videos (randomized order)
+        const randomVideos = shuffleArray(allVideos);
 
         const grid = document.getElementById('video-grid');
         grid.innerHTML = '';
