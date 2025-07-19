@@ -68,16 +68,20 @@
   </nav>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Get video info from localStorage
-    const videoTitle = localStorage.getItem('player_video_title') || 'Untitled Video';
-    const videoThumbnail = localStorage.getItem('player_video_thumbnail') || '';
-    const videoUrl = localStorage.getItem('player_video_url') || '';
+    // Read video details from URL query parameters
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name) || '';
+    }
 
-    document.getElementById('video-title').textContent = videoTitle;
+    const videoTitle = getQueryParam('title');
+    const videoThumbnail = getQueryParam('thumbnail');
+    const videoUrl = getQueryParam('url');
+
+    document.getElementById('video-title').textContent = videoTitle || 'Untitled Video';
 
     const videoContainer = document.getElementById('video-container');
     if (videoUrl && videoUrl.includes('youtube.com/embed/')) {
-      // If it's a YouTube embed URL
       videoContainer.innerHTML = `
         <iframe
           width="100%"
@@ -91,7 +95,6 @@
         ></iframe>
       `;
     } else if (videoUrl) {
-      // Generic <video> player for other URLs (mp4, etc)
       videoContainer.innerHTML = `
         <video width="100%" height="480" controls autoplay poster="${videoThumbnail}" style="aspect-ratio: 16/9; width: 100%; min-width: 200px; display: block;">
           <source src="${videoUrl}">
@@ -99,7 +102,6 @@
         </video>
       `;
     } else if (videoThumbnail) {
-      // Fallback: show thumbnail only
       videoContainer.innerHTML = `<img src="${videoThumbnail}" alt="Video Thumbnail" style="width:100%; aspect-ratio:16/9; display:block;">`;
     } else {
       videoContainer.innerHTML = `<div class="text-danger p-4">No video selected.</div>`;
