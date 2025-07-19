@@ -69,17 +69,13 @@
       if (!query) return 0;
       title = title.toLowerCase();
       query = query.toLowerCase();
-      // Exact match
       if (title === query) return 100;
-      // All query words present in title
       const queryWords = query.split(/\s+/);
       let score = 0;
       queryWords.forEach(word => {
         if (title.includes(word)) score += 10;
       });
-      // Bonus for prefix match
       if (title.startsWith(query)) score += 10;
-      // Bonus for substring match
       if (title.includes(query)) score += 20;
       return score;
     }
@@ -108,24 +104,27 @@
         `;
         // Add click event to card
         col.querySelector('.video-card').addEventListener('click', function() {
-          // Store info in localStorage
           localStorage.setItem('player_video_title', video.title || '');
           localStorage.setItem('player_video_thumbnail', video.thumbnail || '');
           localStorage.setItem('player_video_url', video.videoUrl || '');
-          // Navigate to player.html
           window.location.href = 'player.html';
         });
         grid.appendChild(col);
       });
     }
 
+    // Parse query string
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name) || '';
+    }
+
     let allVideos = [];
 
-    // Fetch random videos from videos.json
+    // Fetch videos from videos.json
     fetch('videos.json')
       .then(response => response.json())
       .then(videos => {
-        // Collect all videos from possible structures
         if (Array.isArray(videos)) {
           allVideos = videos;
         } else if (Array.isArray(videos.videos)) {
@@ -137,25 +136,28 @@
             }
           });
         }
-
-        // Shuffle and display all videos (randomized order)
         allVideos = shuffleArray(allVideos);
-        renderVideos(allVideos);
+
+        // Set input value if query is present in url
+        const urlQuery = getQueryParam('query');
+        if (urlQuery) {
+          document.getElementById('search-input').value = urlQuery;
+          showSearchResults(urlQuery);
+        } else {
+          renderVideos(allVideos);
+        }
       })
       .catch(error => {
         document.getElementById('video-grid').innerHTML = '<div class="text-danger">Failed to load videos.</div>';
         console.error('Error loading videos:', error);
       });
 
-    // Search handler
-    document.getElementById('search-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const query = document.getElementById('search-input').value.trim();
+    // Function to show results for a query
+    function showSearchResults(query) {
       if (!query) {
         renderVideos(allVideos);
         return;
       }
-      // Score and sort
       const scoredVideos = allVideos
         .map(video => ({
           ...video,
@@ -163,11 +165,28 @@
         }))
         .sort((a, b) => b._matchScore - a._matchScore);
       renderVideos(scoredVideos);
+    }
+
+    // Search handler
+    document.getElementById('search-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const query = document.getElementById('search-input').value.trim();
+      // Update URL with query param
+      const newUrl = query
+        ? window.location.pathname + '?query=' + encodeURIComponent(query)
+        : window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+      showSearchResults(query);
     });
 
-    // (Optional) Live search as user types
+    // Optionally, support live search as user types (uncomment if needed)
     // document.getElementById('search-input').addEventListener('input', function() {
-    //   document.getElementById('search-form').dispatchEvent(new Event('submit'));
+    //   const query = this.value.trim();
+    //   const newUrl = query
+    //     ? window.location.pathname + '?query=' + encodeURIComponent(query)
+    //     : window.location.pathname;
+    //   window.history.replaceState({}, '', newUrl);
+    //   showSearchResults(query);
     // });
   </script>
 </body>
