@@ -10,191 +10,25 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="styles.css" rel="stylesheet">
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      overflow: hidden;
-      background: #f9f9f9;
-    }
-    body {
-      min-height: 100vh;
-      background: #f9f9f9;
-    }
-    .navbar {
-      z-index: 1040;
-    }
-
-    /* Root layout with sidebar and main */
-    .page-root {
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      flex-direction: row;
-      padding-top: 56px; /* navbar */
+    .video-responsive {
       position: relative;
-      overflow: hidden;
-    }
-    /* Sidebar styling */
-    .custom-sidebar {
-      min-width: 220px;
-      max-width: 250px;
-      width: 220px;
-      background: #fff;
-      box-shadow: 1px 0 2px rgba(0,0,0,0.1);
-      z-index: 1041;
-      height: 100vh;
-      padding-top: 60px;
-      position: fixed;
-      top: 56px;
-      left: 0;
-      bottom: 0;
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid #eee;
-    }
-    @media (max-width: 991.98px) {
-      .custom-sidebar {
-        display: none !important;
-      }
-    }
-
-    /* Main content area right of sidebar */
-    .page-main {
-      flex: 1 1 0;
-      margin-left: 220px;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-    }
-    @media (max-width: 991.98px) {
-      .page-main {
-        margin-left: 0;
-      }
-    }
-
-    /* Fixed video player+info (desktop: curved, centered, not full width) */
-    .fixed-player-container {
       width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      z-index: 1042;
-      position: fixed;
-      left: 220px;
-      /* top is 56px for navbar */
-      top: 56px;
-      right: 0;
-      pointer-events: none;
-      background: transparent;
-      /* allow only player-inner to capture events */
-    }
-    @media (max-width: 991.98px) {
-      .fixed-player-container {
-        left: 0;
-      }
-    }
-    .fixed-player-inner {
-      pointer-events: auto;
-      background: #fff;
-      margin-top: 16px;
-      border-radius: 18px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.10);
-      /* Reduced width for desktop mode */
-      width: 640px;
-      max-width: 95vw;
-      min-width: 320px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: width 0.2s, border-radius 0.2s;
-    }
-    .fixed-player-inner .card.mb-4 {
-      margin-bottom: 0 !important;
-      border-radius: inherit !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      border: none;
-      background: inherit;
-      box-shadow: none;
-    }
-    .fixed-player-inner .video-responsive {
-      border-radius: 0 !important;
+      padding-top: 56.25%;
       background: #000;
+      overflow: hidden;
     }
-    .fixed-player-inner .card-body {
-      background: #fff;
-      border-top: 1px solid #eee;
-      position: relative;
-      z-index: 2;
-      padding: 16px 16px 8px 16px;
-    }
-    .fixed-player-inner .video-title {
-      font-weight: 600;
-      font-size: 20px;
-      margin-bottom: 6px;
-    }
-    .fixed-player-inner .video-meta {
-      font-size: 15px;
-      color: #606060;
-      margin-bottom: 2px;
-    }
-    /* Height for player+info */
-    .fixed-player-inner {
-      height: 480px;
-    }
-    @media (max-width: 991.98px) {
-      .fixed-player-inner {
-        width: 100vw;
-        min-width: 0;
-        max-width: 100vw;
-        border-radius: 0;
-        margin-top: 0;
-        box-shadow: none;
-        height: 260px;
-      }
-      .fixed-player-inner .card-body {
-        padding: 12px 8px 6px 12px;
-      }
-    }
-
-    /* Scrolling area for video cards */
-    .player-page-main-scroll {
+    .video-responsive iframe,
+    .video-responsive video,
+    .video-responsive img {
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
-      background: #f9f9f9;
-      z-index: 1;
-      top: 0; /* will be set by JS */
-      /* padding-top is dynamically set by JS */
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+      background: #000;
+      display: block;
     }
-    .player-page-main-scroll .container-fluid {
-      margin-top: 0 !important;
-      padding-top: 0;
-    }
-    @media (min-width: 992px) {
-      .player-page-main-scroll .container-fluid {
-        max-width: 1200px;
-      }
-    }
-    @media (max-width: 767.98px) {
-      .player-page-main-scroll .container-fluid {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-      }
-    }
-
-    /* Fix z-index for nav/sidebar/player */
-    .navbar { z-index: 1040; }
-    .custom-sidebar { z-index: 1041; }
-    .fixed-player-container { z-index: 1042; }
-    .player-page-main-scroll { z-index: 1; }
   </style>
 </head>
 <body>
@@ -207,34 +41,29 @@
       </button>
     </form>
   </nav>
-
-  <div class="page-root">
-    <div class="custom-sidebar d-none d-md-block">
-      <div class="menu-item"><span class="material-icons">home</span> Home</div>
-      <div class="menu-item"><span class="material-icons">subscriptions</span> Subscriptions</div>
-      <div class="menu-item"><span class="material-icons">video_library</span> Library</div>
-      <div class="menu-item"><span class="material-icons">history</span> History</div>
-    </div>
-    <div class="page-main">
-      <!-- Fixed Video Player (always at top, below navbar) -->
-      <div class="fixed-player-container">
-        <div class="fixed-player-inner">
-          <div class="card mb-4">
-            <div class="video-responsive" id="video-container"></div>
-            <div class="card-body" id="video-info">
-              <div class="video-title" id="video-title"></div>
-              <div class="video-meta" id="video-channel"></div>
-              <div class="video-meta" id="video-stats"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2 sidebar d-none d-md-block position-fixed">
+        <div class="menu-item"><span class="material-icons">home</span> Home</div>
+        <div class="menu-item"><span class="material-icons">subscriptions</span> Subscriptions</div>
+        <div class="menu-item"><span class="material-icons">video_library</span> Library</div>
+        <div class="menu-item"><span class="material-icons">history</span> History</div>
+      </div>
+      <div class="col-md-10 offset-md-2 pt-4">
+        <div class="row mt-5">
+          <div class="col-12">
+            <div class="card mb-4" style="border-radius: 12px; overflow: hidden;">
+              <div class="video-responsive" id="video-container"></div>
+              <div class="card-body">
+                <div class="video-title" id="video-title"></div>
+                <div class="video-meta">Channel Name</div>
+                <div class="video-meta">1M views • 2 days ago</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- Main scrollable area for video cards -->
-      <div class="player-page-main-scroll" id="player-scroll">
-        <div class="container-fluid px-3">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="video-grid">
-            <!-- Video cards will be generated here -->
-          </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3" id="video-grid">
+          <!-- Video cards will be generated here -->
         </div>
       </div>
     </div>
@@ -268,13 +97,7 @@
     const videoThumbnail = getQueryParam('thumbnail');
     const videoUrl = getQueryParam('url');
 
-    // Demo channel/stats info (replace with real data if available)
-    const demoChannel = 'Channel Name';
-    const demoStats = '1M views • 2 days ago';
-
     document.getElementById('video-title').textContent = videoTitle || 'Untitled Video';
-    document.getElementById('video-channel').textContent = demoChannel;
-    document.getElementById('video-stats').textContent = demoStats;
 
     const videoContainer = document.getElementById('video-container');
     if (videoUrl && videoUrl.includes('youtube.com/embed/')) {
@@ -391,6 +214,7 @@
         } else {
           renderVideos(filteredVideos);
         }
+        // Make filteredVideos available for search
         window.filteredVideos = filteredVideos;
       })
       .catch(error => {
@@ -416,28 +240,12 @@
     document.getElementById('search-form').addEventListener('submit', function(e) {
       e.preventDefault();
       const query = document.getElementById('search-input').value.trim();
+      // Update URL with query param
       const params = new URLSearchParams(window.location.search);
       params.set('query', query);
       window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
       showSearchResults(query, window.filteredVideos);
     });
-
-    // Dynamically set the scroll area's top based on player height (responsive)
-    function setScrollPadding() {
-      const player = document.querySelector('.fixed-player-inner');
-      const scrollArea = document.getElementById('player-scroll');
-      if (player && scrollArea) {
-        // Get player height including margin
-        let offset = 56; // Navbar
-        let marginTop = window.innerWidth >= 992 ? 16 : 0;
-        let playerHeight = player.offsetHeight + marginTop;
-        scrollArea.style.top = (offset + playerHeight) + "px";
-      }
-    }
-    window.addEventListener('resize', setScrollPadding);
-    window.addEventListener('DOMContentLoaded', setScrollPadding);
-    setTimeout(setScrollPadding, 500);
-    setTimeout(setScrollPadding, 1000);
   </script>
 </body>
 </html>
