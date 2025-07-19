@@ -180,6 +180,12 @@ body {
     width: 100vw !important;
     max-width: 100vw !important;
   }
+  /* Remove gap between video cards */
+  #video-grid {
+    gap: 0 !important;
+    row-gap: 0 !important;
+    column-gap: 0 !important;
+  }
   /* Video player full width, no negative margins */
   .card.mb-4,
   .card.mb-4 > .video-responsive,
