@@ -29,6 +29,36 @@
       background: #000;
       display: block;
     }
+    /* Sticky video player below navbar */
+    .sticky-player-wrapper {
+      position: sticky;
+      top: 56px; /* height of navbar */
+      z-index: 1030;
+      background: #fff;
+    }
+    @media (max-width: 991.98px) {
+      .sticky-player-wrapper {
+        top: 56px; /* for mobile navbar height */
+      }
+    }
+    @media (max-width: 767.98px) {
+      .sticky-player-wrapper {
+        top: 56px;
+      }
+    }
+    /* Remove margin between sticky player and navbar */
+    .sticky-player-wrapper .card.mb-4 {
+      margin-bottom: 0 !important;
+    }
+    body {
+      /* Avoid content hidden below sticky player */
+      padding-top: 56px !important;
+    }
+    @media (max-width: 767.98px) {
+      body {
+        padding-top: 56px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -50,18 +80,17 @@
         <div class="menu-item"><span class="material-icons">history</span> History</div>
       </div>
       <div class="col-md-10 offset-md-2 pt-4">
-        <div class="row mt-5">
-          <div class="col-12">
-            <div class="card mb-4" style="border-radius: 12px; overflow: hidden;">
-              <div class="video-responsive" id="video-container"></div>
-              <div class="card-body">
-                <div class="video-title" id="video-title"></div>
-                <div class="video-meta">Channel Name</div>
-                <div class="video-meta">1M views • 2 days ago</div>
-              </div>
+        <div class="sticky-player-wrapper">
+          <div class="card mb-4" style="border-radius: 12px; overflow: hidden;">
+            <div class="video-responsive" id="video-container"></div>
+            <div class="card-body">
+              <div class="video-title" id="video-title"></div>
+              <div class="video-meta">Channel Name</div>
+              <div class="video-meta">1M views • 2 days ago</div>
             </div>
           </div>
         </div>
+        <!-- Video Cards Grid Below Player -->
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3" id="video-grid">
           <!-- Video cards will be generated here -->
         </div>
@@ -240,7 +269,6 @@
     document.getElementById('search-form').addEventListener('submit', function(e) {
       e.preventDefault();
       const query = document.getElementById('search-input').value.trim();
-      // Update URL with query param
       const params = new URLSearchParams(window.location.search);
       params.set('query', query);
       window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
