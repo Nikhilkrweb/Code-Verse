@@ -9,6 +9,28 @@
   <!-- Google Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="styles.css" rel="stylesheet">
+  <style>
+    /* Responsive video container height fix for Android/mobile */
+    @media (max-width: 767.98px) {
+      #video-container iframe,
+      #video-container video,
+      #video-container img {
+        height: 220px !important;
+        max-height: 220px !important;
+        min-height: 120px !important;
+      }
+    }
+    /* Optionally, for slightly better scaling at very small sizes */
+    @media (max-width: 400px) {
+      #video-container iframe,
+      #video-container video,
+      #video-container img {
+        height: 150px !important;
+        max-height: 150px !important;
+        min-height: 90px !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar navbar-light bg-white fixed-top shadow-sm px-3">
@@ -81,11 +103,15 @@
     document.getElementById('video-title').textContent = videoTitle || 'Untitled Video';
 
     const videoContainer = document.getElementById('video-container');
+    // Use responsive width and fixed height for Android/mobile
+    const desktopHeight = "480";
+    const mobileHeight = window.innerWidth <= 767 ? "220" : desktopHeight;
+
     if (videoUrl && videoUrl.includes('youtube.com/embed/')) {
       videoContainer.innerHTML = `
         <iframe
           width="100%"
-          height="480"
+          height="${mobileHeight}"
           src="${videoUrl}?autoplay=1"
           title="${videoTitle}"
           frameborder="0"
@@ -96,13 +122,13 @@
       `;
     } else if (videoUrl) {
       videoContainer.innerHTML = `
-        <video width="100%" height="480" controls autoplay poster="${videoThumbnail}" style="aspect-ratio: 16/9; width: 100%; min-width: 200px; display: block;">
+        <video width="100%" height="${mobileHeight}" controls autoplay poster="${videoThumbnail}" style="aspect-ratio: 16/9; width: 100%; min-width: 200px; display: block;">
           <source src="${videoUrl}">
           Your browser does not support the video tag.
         </video>
       `;
     } else if (videoThumbnail) {
-      videoContainer.innerHTML = `<img src="${videoThumbnail}" alt="Video Thumbnail" style="width:100%; aspect-ratio:16/9; display:block;">`;
+      videoContainer.innerHTML = `<img src="${videoThumbnail}" alt="Video Thumbnail" style="width:100%; aspect-ratio:16/9; display:block; height:${mobileHeight}px;">`;
     } else {
       videoContainer.innerHTML = `<div class="text-danger p-4">No video selected.</div>`;
     }
