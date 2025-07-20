@@ -50,8 +50,9 @@
         <div class="menu-item"><span class="material-icons">history</span> History</div>
       </div>
       <div class="col-md-10 offset-md-2 pt-4 player-main-col">
-        <div class="android-player-sticky" id="android-player-sticky">
-          <div class="card mb-4" style="border-radius: 12px; overflow: hidden;">
+        <!-- Fixed video player card for Android/mobile view -->
+        <div class="android-player-fixed" id="android-player-fixed">
+          <div class="card mb-4">
             <div class="video-responsive" id="video-container"></div>
             <div class="card-body">
               <div class="video-title" id="video-title"></div>
@@ -60,8 +61,9 @@
             </div>
           </div>
         </div>
+        <!-- Scrollable video grid for Android/mobile view -->
         <div class="android-video-list-scroll" id="android-video-list-scroll">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3" id="video-grid">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="video-grid">
             <!-- Video cards will be generated here -->
           </div>
         </div>
