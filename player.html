@@ -17,6 +17,7 @@
       background: #fff;
       margin-bottom: 0;
       margin-top: 0;
+      z-index: 101;
     }
     .video-responsive {
       position: relative;
@@ -37,6 +38,62 @@
       background: #000;
       display: block;
     }
+
+    /* Make video grid scrollable and player card fixed on desktop */
+    @media (min-width: 768px) {
+      body {
+        height: 100vh;
+        overflow: hidden !important;
+      }
+      .container-fluid,
+      .container-fluid > .row,
+      .col-md-10,
+      .col-12 {
+        height: 100vh;
+        min-height: 100vh;
+        max-height: 100vh;
+        overflow: hidden !important;
+      }
+      .player-card {
+        position: fixed;
+        top: 56px; /* Height of fixed navbar */
+        left: 0;
+        right: 0;
+        width: calc(100vw - 16.6667vw); /* Account for 2/12 sidebar width */
+        max-width: 100vw;
+        margin-left: 16.6667vw; /* Sidebar width for .col-md-2 */
+        z-index: 101;
+      }
+      .sidebar {
+        z-index: 102;
+      }
+      #fullscreen-videos {
+        position: absolute;
+        top: calc(56px + 280px); /* 56px navbar + 280px player card height (approx) */
+        left: 16.6667vw;
+        right: 0;
+        bottom: 0;
+        width: calc(100vw - 16.6667vw);
+        max-width: 100vw;
+        height: calc(100vh - (56px + 280px));
+        overflow-y: auto;
+        background: #f9f9f9;
+        z-index: 100;
+      }
+      /* Adjust player card height to match your design/card height */
+      .player-card {
+        height: 280px;
+      }
+      /* Remove extra margin/padding from grid */
+      #video-grid {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+      }
+      .row.mt-5 {
+        margin-top: 0 !important;
+      }
+    }
+
     /* --- Mobile View --- */
     @media (max-width: 767.98px) {
       html, body {
@@ -92,20 +149,8 @@
         overflow-y: auto;
         z-index: 99;
       }
-      /* Prevent scrolling of player card, only video grid can scroll */
       .scroll-lock {
         overflow: hidden !important;
-      }
-    }
-    @media (min-width: 768px) {
-      #fullscreen-videos {
-        position: static;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        background: transparent;
-        overflow-y: visible;
-        z-index: auto;
       }
     }
   </style>
@@ -139,7 +184,6 @@
                 <div class="video-meta">1M views • 2 days ago</div>
               </div>
             </div>
-            <!-- The new fullscreen div is here, AFTER the player card, inside col-12 -->
             <div id="fullscreen-videos">
               <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3" id="video-grid">
                 <!-- Video cards will be generated here -->
@@ -329,16 +373,12 @@
       showSearchResults(query, window.filteredVideos);
     });
 
-    // --- Prevent player card from scrolling on mobile ---
-    function lockScrollMobile() {
-      if(window.innerWidth < 768){
-        document.querySelector('.player-card').classList.add('scroll-lock');
-      } else {
-        document.querySelector('.player-card').classList.remove('scroll-lock');
-      }
+    // --- Prevent player card from scrolling on mobile and desktop ---
+    function lockScroll() {
+      document.querySelector('.player-card').classList.add('scroll-lock');
     }
-    window.addEventListener('resize', lockScrollMobile);
-    window.addEventListener('DOMContentLoaded', lockScrollMobile);
+    window.addEventListener('resize', lockScroll);
+    window.addEventListener('DOMContentLoaded', lockScroll);
   </script>
 </body>
 </html>
