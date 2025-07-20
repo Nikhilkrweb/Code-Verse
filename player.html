@@ -41,7 +41,7 @@
       </button>
     </form>
   </nav>
-  <div class="container-fluid main-player-container">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-md-2 sidebar d-none d-md-block position-fixed">
         <div class="menu-item"><span class="material-icons">home</span> Home</div>
@@ -49,23 +49,21 @@
         <div class="menu-item"><span class="material-icons">video_library</span> Library</div>
         <div class="menu-item"><span class="material-icons">history</span> History</div>
       </div>
-      <div class="col-md-10 offset-md-2 mt-5 player-main-col">
-        <!-- Fixed video player card for Android/mobile view -->
-        <div class="android-player-fixed" id="android-player-fixed">
-          <div class="card">
-            <div class="video-responsive" id="video-container"></div>
-            <div class="card-body android-player-info">
-              <div class="video-title" id="video-title"></div>
-              <div class="video-meta">Channel Name</div>
-              <div class="video-meta">1M views • 2 days ago</div>
+      <div class="col-md-10 offset-md-2 pt-4">
+        <div class="row mt-5">
+          <div class="col-12">
+            <div class="card mb-4" style="border-radius: 12px; overflow: hidden;">
+              <div class="video-responsive" id="video-container"></div>
+              <div class="card-body">
+                <div class="video-title" id="video-title"></div>
+                <div class="video-meta">Channel Name</div>
+                <div class="video-meta">1M views • 2 days ago</div>
+              </div>
             </div>
           </div>
         </div>
-        <!-- Scrollable video grid for Android/mobile view -->
-        <div class="android-video-list-scroll" id="android-video-list-scroll">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="video-grid">
-            <!-- Video cards will be generated here -->
-          </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3" id="video-grid">
+          <!-- Video cards will be generated here -->
         </div>
       </div>
     </div>
