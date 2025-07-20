@@ -189,6 +189,7 @@ body {
     gap: 0 !important;
     row-gap: 0 !important;
     column-gap: 0 !important;
+    margin-top: 0 !important;
   }
   /* Remove any extra margin from Bootstrap g-4/g-3/g-2/g-1/g-0 utility classes if present */
   [class*="g-"] {
@@ -225,36 +226,26 @@ body {
     background: #fff;
     width: 100vw !important;
     max-width: 100vw !important;
+    height: 234px; /* approx player card height */
+    min-height: 234px;
+    max-height: 234px;
+    overflow: visible;
   }
-  .android-video-list-scroll {
-    max-height: calc(100vh - 56px - 234px - 60px); /* navbar + player + mobile footer */
-    overflow-y: auto;
-    width: 100vw !important;
-    max-width: 100vw !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    background: transparent;
-  }
-  /* Player height fix */
   .android-player-sticky .card.mb-4 {
     margin-bottom: 0 !important;
     border-radius: 0 !important;
     width: 100vw !important;
     max-width: 100vw !important;
   }
-  /* Estimate player card height for sticky calculations */
-  @media (max-width: 767.98px) {
-    .android-player-sticky {
-      height: 234px; /* approx 16:9 for 100vw + some padding */
-      min-height: 234px;
-      max-height: 234px;
-      overflow: visible;
-    }
-    .android-player-sticky .video-responsive {
-      height: 56.25vw !important;
-      min-height: 56.25vw !important;
-      max-height: 56.25vw !important;
-    }
+  .android-video-list-scroll {
+    /* Remove margin-top, use padding-top equal to player card height */
+    margin-top: 0 !important;
+    padding-top: 234px !important; /* same as sticky player card height */
+    max-height: calc(100vh - 56px - 60px); /* navbar + mobile footer */
+    overflow-y: auto;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    background: transparent;
   }
 }
 
