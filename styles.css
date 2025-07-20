@@ -206,9 +206,6 @@ body {
     width: 100vw !important;
     max-width: 100vw !important;
     background: #fff;
-    height: 234px; /* player card height */
-    min-height: 234px;
-    max-height: 234px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
   .android-player-fixed .card.mb-4 {
@@ -216,14 +213,24 @@ body {
     border-radius: 0 !important;
     width: 100vw !important;
     max-width: 100vw !important;
-    height: 234px;
-    min-height: 234px;
-    max-height: 234px;
+    height: auto !important;
+    min-height: unset !important;
+    max-height: unset !important;
+    box-shadow: none !important;
   }
+  .android-player-info {
+    padding: 16px 12px 12px 12px;
+    background: #fff;
+    position: relative;
+    z-index: 2;
+  }
+  /* Responsive: player height + info height for scroll offset */
   .android-video-list-scroll {
     margin-top: 0 !important;
-    padding-top: 234px !important; /* height of fixed player card */
-    max-height: calc(100vh - 56px - 60px); /* navbar + mobile footer */
+    /* Height of video area + height of info area */
+    /* 56.25vw is 16:9 for video, 73px is estimated info area, adjust if needed */
+    padding-top: calc(56.25vw + 73px) !important;
+    max-height: calc(100vh - 56px - 60px) !important; /* navbar + mobile footer */
     overflow-y: auto;
     width: 100vw !important;
     max-width: 100vw !important;
@@ -295,4 +302,4 @@ body {
   object-fit: cover;
   background: #000;
   display: block;
-  }
+}
