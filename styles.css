@@ -189,52 +189,25 @@ body {
     gap: 0 !important;
     row-gap: 0 !important;
     column-gap: 0 !important;
-    margin-top: 0 !important;
   }
   /* Remove any extra margin from Bootstrap g-4/g-3/g-2/g-1/g-0 utility classes if present */
   [class*="g-"] {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
-  /* Fixed player layout for Android view */
-  .android-player-fixed {
-    position: fixed;
-    top: 56px; /* navbar height */
-    left: 0;
-    right: 0;
-    z-index: 1025;
-    width: 100vw !important;
-    max-width: 100vw !important;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
-  .android-player-fixed .card.mb-4 {
-    margin-bottom: 0 !important;
+  /* Video player full width, no negative margins */
+  .card.mb-4,
+  .card.mb-4 > .video-responsive,
+  .card.mb-4 > #video-container,
+  .video-responsive, #video-container {
     border-radius: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     width: 100vw !important;
     max-width: 100vw !important;
-    height: auto !important;
-    min-height: unset !important;
-    max-height: unset !important;
-    box-shadow: none !important;
-  }
-  .android-player-info {
-    padding: 16px 12px 12px 12px;
-    background: #fff;
+    left: 0 !important;
+    right: 0 !important;
     position: relative;
-    z-index: 2;
-  }
-  /* Responsive: player height + info height for scroll offset */
-  .android-video-list-scroll {
-    margin-top: 0 !important;
-    /* Height of video area + height of info area */
-    /* 56.25vw is 16:9 for video, 73px is estimated info area, adjust if needed */
-    padding-top: calc(56.25vw + 73px) !important;
-    max-height: calc(100vh - 56px - 60px) !important; /* navbar + mobile footer */
-    overflow-y: auto;
-    width: 100vw !important;
-    max-width: 100vw !important;
-    background: transparent;
   }
 }
 
