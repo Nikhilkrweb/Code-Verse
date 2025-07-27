@@ -98,8 +98,9 @@
         background: #fff !important;
         z-index: 100;
       }
+      /* Remove padding in video player info area on mobile */
       .player-card .card-body {
-        padding: 16px 12px 12px 12px !important;
+        padding: 0 !important;
       }
       #fullscreen-videos {
         position: absolute;
@@ -119,6 +120,10 @@
       }
     }
     @media (min-width: 768px) {
+      /* Remove padding in video player info area on desktop */
+      .player-card .card-body {
+        padding: 0 !important;
+      }
       #fullscreen-videos {
         position: static;
         width: 100%;
